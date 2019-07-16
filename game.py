@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jul 12 10:19:12 2019
-
-@author: elfbe
-"""
-
 import pygame
 from pygame.locals import *
 #load sprites
