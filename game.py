@@ -27,6 +27,10 @@ combat = False
 board = [(, 0, 0, 0, 0, 0, ),
          (, 0, 0, 0, 0, 0, ),
          (, 0, 0, 0, 0, 0, )]
+
+def blit_board(board):
+         print("x")
+         
 # define a main function
 def main():
      
