@@ -24,9 +24,9 @@ enemyHP = 10
 playerTurn = True
 combat = False
 #Creates an array to represent the playinb board
-board = [0, 0, 0, 0, 0, 0, 0,
-         0, 0, 0, 0, 0, 0, 0,
-         0, 0, 0, 0, 0, 0, 0]
+board = [(, 0, 0, 0, 0, 0, ),
+         (, 0, 0, 0, 0, 0, ),
+         (, 0, 0, 0, 0, 0, )]
 # define a main function
 def main():
      
