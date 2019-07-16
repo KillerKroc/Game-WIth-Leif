@@ -24,18 +24,18 @@ enemyHP = 10
 playerTurn = True
 combat = False
 #Creates an array to represent the playinb board
-board = [(, 0, 0, 0, 0, 0, ),
-         (, 0, 0, 0, 0, 0, ),
-         (, 0, 0, 0, 0, 0, )]
+board = ['(', 0, 0, 0, 0, 0, ')',
+         '(', 0, 0, 0, 0, 0, ')',
+         '(', 0, 0, 0, 0, 0, ')']
 
 def blit_board(board):
          print("x")
-         
+# initialize the pygame module
+pygame.init()    
 # define a main function
 def main():
      
-    # initialize the pygame module
-    pygame.init()
+    
     
     #load and set the logo
     logo = pygame.image.load("logo32x32.png")
@@ -60,3 +60,4 @@ def main():
 if __name__=="__main__":
     # call the main function
     main()
+    pygame.quit()
