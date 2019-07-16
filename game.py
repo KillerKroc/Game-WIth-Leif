@@ -27,16 +27,14 @@ combat = False
 board = ['(', 0, 0, 0, 0, 0, ')',
          '(', 0, 0, 0, 0, 0, ')',
          '(', 0, 0, 0, 0, 0, ')']
-
-def blit_board(board):
-         print("x")
-# initialize the pygame module
-pygame.init()    
+#blits board to screen
+def blit_board(board, screen):
+         screen.blit(field, [0, 0])
+         pygame.display.flip()
+#initialize pygame
+pygame.init()     
 # define a main function
 def main():
-     
-    
-    
     #load and set the logo
     logo = pygame.image.load("logo32x32.png")
     pygame.display.set_icon(logo)
@@ -44,12 +42,16 @@ def main():
      
     # create a surface on screen that has the size of 240 x 180
     screen = pygame.display.set_mode((1920,1080))
-     
+
+    #fill the screen
+    screen.fill([0, 0, 0])
+    pygame.display.flip()
     # define a variable to control the main loop
     running = True
      
     # main loop
     while running:
+        blit_board(board, screen)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
