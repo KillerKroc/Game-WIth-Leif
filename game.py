@@ -51,7 +51,44 @@ def main():
      
     # main loop
     while running:
+        
+
         blit_board(board, screen)
+        
+
+        #player turn
+        if (playerTurn == True):
+            #play
+            if (combat == False):
+                #player actions
+                if(#start combat button is pushed):
+                    combat = True
+            #combat
+            if (combat == True):
+                #combat process
+                if (#combat is complete):
+                    combat = False
+                    playerTurn = False
+                    
+        #enemy turn
+        if (playerTurn == False):
+            #enemy play
+            if (combat == False):
+                #AI decision making. Once reached decision execute orders and set combat to true
+            #enemy combat
+            if (combat == True):
+                #enemy combat process
+                if (#combat is complete):
+                    combat = False
+                    playerTurn = True
+        #victory
+        if (enemyHP <= 0):
+            #win
+        #failure
+        if (playerHP <= 0):
+            #lose
+        
+        
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
