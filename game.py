@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+
 #load sprites
 APBar0 = pygame.image.load("APBar.png")
 AP = pygame.image.load("AP.png")
@@ -11,21 +12,26 @@ tank = pygame.image.load("tank.png")
 orc = pygame.image.load("orc.png")
 select = pygame.image.load("select.png")
 
+#define variables
 playerHP = 10
 AP = 0
 enemyHP = 10
 playerTurn = True
 combat = False
+
 #Creates an array to represent the playinb board
 board = ['(', 0, 0, 0, 0, 0, ')',
          '(', 0, 0, 0, 0, 0, ')',
          '(', 0, 0, 0, 0, 0, ')']
+
 #blits board to screen
 def blit_board(board, screen):
          screen.blit(field, [0, 0])
          pygame.display.flip()
+         
 #initialize pygame
-pygame.init()     
+pygame.init()    
+
 # define a main function
 def main():
     #load and set the logo
