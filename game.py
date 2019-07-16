@@ -7,7 +7,7 @@ Created on Fri Jul 12 10:19:12 2019
 
 import pygame
 from pygame.locals import *
-
+#load sprites
 APBar0 = pygame.image.load("APBar.png")
 AP = pygame.image.load("AP.png")
 field = pygame.image.load("field.png")
@@ -23,7 +23,10 @@ AP = 0
 enemyHP = 10
 playerTurn = True
 combat = False
- 
+#Creates an array to represent the playinb board
+board = [0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0]
 # define a main function
 def main():
      
