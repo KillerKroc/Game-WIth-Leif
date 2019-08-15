@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 
+
 #load sprites
 APBar0 = pygame.image.load("APBar.png")
 AP = pygame.image.load("AP.png")
@@ -12,12 +13,91 @@ tank = pygame.image.load("tank.png")
 orc = pygame.image.load("orc.png")
 select = pygame.image.load("select.png")
 
+
+#add system for naming troops by default or players choosing
+#implement abilities based on equipment and creatures
+
+
 #define variables
 playerHP = 10
 AP = 0
 enemyHP = 10
 playerTurn = True
 combat = False
+
+#Creates Stats Dictionaries
+#the stats of the creatures in the game (some might not be allowed certain equipment implement when we need)
+creatures = {
+        #damage, health, movement, range
+        "orc": [2, 4, 1, 1],
+        "goblin": [3, 2, 1, 1]
+        }
+#the stats of equipment in the game (might make seperate one for armor, weapons, runes, artifacts, etc)
+equipment = {
+        #damage, health, movement, range
+        "dogslicer": [1, 2, 1, 0],
+        "knives": [0, 2, 2, 0],
+        "bow": [2, 0, 0, 2]
+        }
+#the names of the creatures and equipment in the player's deck
+deckList = {
+        "name1": "orc",
+        "equip1": "dogslicer"
+        }
+#the stats of the units in the player's deck
+deckStats = {
+        #damage, health, movement, range, name, equip
+        1: [creatures[deckList["name1"]][0] + equipment[deckList["equip1"]][0], creatures[deckList["name1"]][1] + equipment[deckList["equip1"]][1], creatures[deckList["name1"]][2] + equipment[deckList["equip1"]][2], creatures[deckList["name1"]][3] + equipment[deckList["equip1"]][3], deckList["name1"], deckList["equip1"]],
+        2: [creatures[deckList["name2"]][0] + equipment[deckList["equip2"]][0], creatures[deckList["name2"]][1] + equipment[deckList["equip2"]][1], creatures[deckList["name2"]][2] + equipment[deckList["equip2"]][2], creatures[deckList["name2"]][3] + equipment[deckList["equip2"]][3], deckList["name2"], deckList["equip2"]],
+        3: [creatures[deckList["name3"]][0] + equipment[deckList["equip3"]][0], creatures[deckList["name3"]][1] + equipment[deckList["equip3"]][1], creatures[deckList["name3"]][2] + equipment[deckList["equip3"]][2], creatures[deckList["name3"]][3] + equipment[deckList["equip3"]][3], deckList["name3"], deckList["equip3"]],
+        4: [creatures[deckList["name4"]][0] + equipment[deckList["equip4"]][0], creatures[deckList["name4"]][1] + equipment[deckList["equip4"]][1], creatures[deckList["name4"]][2] + equipment[deckList["equip4"]][2], creatures[deckList["name4"]][3] + equipment[deckList["equip4"]][3], deckList["name4"], deckList["equip4"]],
+        5: [creatures[deckList["name5"]][0] + equipment[deckList["equip5"]][0], creatures[deckList["name5"]][1] + equipment[deckList["equip5"]][1], creatures[deckList["name5"]][2] + equipment[deckList["equip5"]][2], creatures[deckList["name5"]][3] + equipment[deckList["equip5"]][3], deckList["name5"], deckList["equip5"]],
+        6: [creatures[deckList["name6"]][0] + equipment[deckList["equip6"]][0], creatures[deckList["name6"]][1] + equipment[deckList["equip6"]][1], creatures[deckList["name6"]][2] + equipment[deckList["equip6"]][2], creatures[deckList["name6"]][3] + equipment[deckList["equip6"]][3], deckList["name6"], deckList["equip6"]],
+        7: [creatures[deckList["name7"]][0] + equipment[deckList["equip7"]][0], creatures[deckList["name7"]][1] + equipment[deckList["equip7"]][1], creatures[deckList["name7"]][2] + equipment[deckList["equip7"]][2], creatures[deckList["name7"]][3] + equipment[deckList["equip7"]][3], deckList["name7"], deckList["equip7"]],
+        8: [creatures[deckList["name8"]][0] + equipment[deckList["equip8"]][0], creatures[deckList["name8"]][1] + equipment[deckList["equip8"]][1], creatures[deckList["name8"]][2] + equipment[deckList["equip8"]][2], creatures[deckList["name8"]][3] + equipment[deckList["equip8"]][3], deckList["name8"], deckList["equip8"]],
+        9: [creatures[deckList["name9"]][0] + equipment[deckList["equip9"]][0], creatures[deckList["name9"]][1] + equipment[deckList["equip9"]][1], creatures[deckList["name9"]][2] + equipment[deckList["equip9"]][2], creatures[deckList["name9"]][3] + equipment[deckList["equip9"]][3], deckList["name9"], deckList["equip9"]],
+        10: [creatures[deckList["name10"]][0] + equipment[deckList["equip10"]][0], creatures[deckList["name10"]][1] + equipment[deckList["equip10"]][1], creatures[deckList["name10"]][2] + equipment[deckList["equip10"]][2], creatures[deckList["name10"]][3] + equipment[deckList["equip10"]][3], deckList["name10"], deckList["equip10"]],
+        11: [creatures[deckList["name11"]][0] + equipment[deckList["equip11"]][0], creatures[deckList["name11"]][1] + equipment[deckList["equip11"]][1], creatures[deckList["name11"]][2] + equipment[deckList["equip11"]][2], creatures[deckList["name11"]][3] + equipment[deckList["equip11"]][3], deckList["name11"], deckList["equip11"]],
+        12: [creatures[deckList["name12"]][0] + equipment[deckList["equip12"]][0], creatures[deckList["name12"]][1] + equipment[deckList["equip12"]][1], creatures[deckList["name12"]][2] + equipment[deckList["equip12"]][2], creatures[deckList["name12"]][3] + equipment[deckList["equip12"]][3], deckList["name12"], deckList["equip12"]],
+        13: [creatures[deckList["name13"]][0] + equipment[deckList["equip13"]][0], creatures[deckList["name13"]][1] + equipment[deckList["equip13"]][1], creatures[deckList["name13"]][2] + equipment[deckList["equip13"]][2], creatures[deckList["name13"]][3] + equipment[deckList["equip13"]][3], deckList["name13"], deckList["equip13"]],
+        14: [creatures[deckList["name14"]][0] + equipment[deckList["equip14"]][0], creatures[deckList["name14"]][1] + equipment[deckList["equip14"]][1], creatures[deckList["name14"]][2] + equipment[deckList["equip14"]][2], creatures[deckList["name14"]][3] + equipment[deckList["equip14"]][3], deckList["name14"], deckList["equip14"]],
+        15: [creatures[deckList["name15"]][0] + equipment[deckList["equip15"]][0], creatures[deckList["name15"]][1] + equipment[deckList["equip15"]][1], creatures[deckList["name15"]][2] + equipment[deckList["equip15"]][2], creatures[deckList["name15"]][3] + equipment[deckList["equip15"]][3], deckList["name15"], deckList["equip15"]]
+        }
+#the instance of all units used in a battle
+battleDict = {
+        #player units
+        1: deckStats[1],
+        2: deckStats[2],
+        3: deckStats[3],
+        4: deckStats[4],
+        5: deckStats[5],
+        6: deckStats[6],
+        7: deckStats[7],
+        8: deckStats[8],
+        9: deckStats[9],
+        10: deckStats[10],
+        11: deckStats[11],
+        12: deckStats[12],
+        13: deckStats[13],
+        14: deckStats[14],
+        15: deckStats[15],
+        #enemy units
+        16: [],
+        17: [],
+        18: [],
+        19: [],
+        20: [],
+        21: [],
+        22: [],
+        23: [],
+        24: [],
+        25: [],
+        26: [],
+        27: [],
+        28: [],
+        29: [],
+        30: []
+        }
 
 #Creates an array to represent the playinb board
 board = ['(', 0, 0, 0, 0, 0, ')',
@@ -30,8 +110,8 @@ def blit_board(board, screen):
          pygame.display.flip()
          
 #initialize pygame
-pygame.init()    
-
+pygame.init()
+     
 # define a main function
 def main():
     #load and set the logo
