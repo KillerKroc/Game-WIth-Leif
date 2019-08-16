@@ -148,8 +148,35 @@ def combat():
                     if(attacks == 0 and move == battleDict[unit][2]):
                         break
                 #update movement position on board
+        board.reverse()
         playerTurn == False
     elif (playerTurn == False):
+        for unit in board:
+            if(unit >= 16):
+                move = 0
+                attacks = battleDict[unit][3]
+                ranging = 1
+                attacking = True
+                while True:
+                    if(attacks >= 1):
+                        target = board[board.index(unit) - (ranging + move)]
+                        if (target == '('):
+                            #resolve attack on player
+                            attacks = attacks - 1
+                        elif (target >= 1 and target <= 15):
+                            #resolve attack
+                            attacks = attacks - 1
+                        elif (target == 0):
+                            ranging = ranging + 1
+                    if(move <= battleDict[unit][2] - 1 and attacking == False and board[board.index(unit) - (move + 1) == 0]):
+                        move = move + 1
+                        attacking = True
+                    if(ranging == battleDict[unit][4] + 1 or attacks == 0):
+                        attacking = False
+                        ranging = 1
+                    if(attacks == 0 and move == battleDict[unit][2]):
+                        break
+                #update movement position on board
         playerTurn == True
     combat == False
          
