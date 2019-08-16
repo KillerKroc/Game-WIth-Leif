@@ -113,6 +113,12 @@ board = ['(', 0, 0, 0, 0, 0, ')',
          '(', 0, 0, 0, 0, 0, ')',
          '(', 0, 0, 0, 0, 0, ')']
 
+#Creates a list to represent the player's deck
+deck = []
+
+#Creates a list to represent the player's hand
+hand = []
+
 #blits board to screen
 def blit_board(board, screen):
          screen.blit(field, [0, 0])
