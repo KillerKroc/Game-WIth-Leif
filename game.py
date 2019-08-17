@@ -6,6 +6,7 @@ Created on Fri Jul 12 10:19:12 2019
 """
 
 import pygame
+import random
 from pygame.locals import *
 
 #load sprites
@@ -114,10 +115,27 @@ board = ['(', 0, 0, 0, 0, 0, ')',
          '(', 0, 0, 0, 0, 0, ')']
 
 #Creates a list to represent the player's deck
-deck = []
+playerDeck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 #Creates a list to represent the player's hand
-hand = []
+playerHand = []
+
+#Creates a list to represent the enemy's deck
+enemyDeck = [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+
+#Creates a list to represent the player's hand
+enemyHand = []
+
+#draws a card
+def drawCard(player):
+    if(player == True):
+        card = random.randint(0, len(playerDeck)-1)
+        playerHand.append(playerDeck[card])
+        playerDeck.pop(card)
+    if(player == False):
+        card = random.randint(0, len(enemyDeck)-1)
+        enemyHand.append(enemyDeck[card])
+        enemyDeck.pop(card)
 
 #blits board to screen
 def blit_board(board, screen):
