@@ -18,20 +18,11 @@ import pygame
 from pygame.locals import *
 
 #load sprites
-APBar0 = pygame.image.load("APBar.png")
-AP = pygame.image.load("AP.png")
 field = pygame.image.load("field.png")
 combatButton = pygame.image.load("fight.png")
-bow = pygame.image.load("bow.png")
-heal = pygame.image.load("heal.png")
-tank = pygame.image.load("tank.png")
-orc = pygame.image.load("orc.png")
 selector = pygame.image.load("select.png")
 hand = pygame.image.load("hand.png")
 background = pygame.image.load("background.png")
-orcBody = pygame.image.load("orcBodyWalk.png")
-orcDogslicer = pygame.image.load("orcArmsIdleDogslicer.png")
-
 #define variables
 playerHp = 10
 enemyHp = 10
@@ -49,9 +40,6 @@ player = True
 
 #the mouse
 mouse = [(0,0), 0] #(pos, b1)
-
-#fatalities in a round of combat
-fatalities = []
 
 #Creates a list to represent the player's deck
 playerDeck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -386,7 +374,11 @@ def main():
                                 if(battleDict[target][1] <= 0):
                                     enemyUpkeep = enemyUpkeep - battleDict[target][6]
                                     enemyAp = enemyAp + battleDict[target][5]
-                                    fatalities.append(board.index(target))
+                                    #remove dead unit here and now
+                                    if(board.index(target) == 6):
+                                        board[board.index(target)] = -2
+                                    else:
+                                        board[board.index(target)] = 0
                                 attacks = attacks - 1
                             else:
                                 ranging = ranging + 1
@@ -437,7 +429,11 @@ def main():
                                 if(battleDict[target][1] <= 0):
                                     playerUpkeep = playerUpkeep - battleDict[target][6]
                                     playerAp = playerAp + battleDict[target][5]
-                                    fatalities.append(board.index(target))
+                                    #remove dead unit here and now
+                                    if(board.index(target) == 0):
+                                        board[board.index(target)] = -1
+                                    else:
+                                        board[board.index(target)] = 0
                                 attacks = attacks - 1
                             else:
                                 ranging = ranging + 1
@@ -446,8 +442,8 @@ def main():
                                 move = move + 1
                                 attacking = True
                     newPosition = board.index(unit) - move
-                    if(board.index(unit) % 7 == 0):
-                        board[board.index(unit)] = -1
+                    if(board.index(unit) % 7 == 6):
+                        board[board.index(unit)] = -2
                     else:
                         board[board.index(unit)] = 0
                     board[newPosition] = unit
@@ -455,14 +451,6 @@ def main():
                 enemyAp = enemyAp + 1
             playerTurn = True
             drawCard(player == False)
-        for dead in fatalities:
-            if(board.index(dead) % 7 == 6):
-                board[board.index(dead)] = -2
-            elif(board.index(dead) % 7 == 0):
-                board[board.index(dead)] = -1
-            else:
-                board[board.index(dead)] = 0
-        fatalities.clear()
         active = 0
         combat = False
     
