@@ -361,7 +361,7 @@ def main():
                             break
                         elif(ranging == battleDict[unit][4] + 1 and board[board.index(unit) - (move + 1)] != 0):
                             break
-                        elif(ranging == battleDict[unit][4] + 1 or attacks == 0):
+                        if (ranging == battleDict[unit][4] + 1 or attacks == 0) and (attacking == True):
                             attacking = False
                             ranging = 1
                         elif(attacks >= 1 and attacking == True):
@@ -390,7 +390,6 @@ def main():
                     newPosition = board.index(unit) - move
                     if(board.index(unit) % 7 == 6):
                         board[board.index(unit)] = -1
-                        print("settospawn")
                     else:
                         board[board.index(unit)] = 0
                     board[newPosition] = unit
@@ -417,7 +416,7 @@ def main():
                             break
                         elif(ranging == battleDict[unit][4] + 1 and board[board.index(unit) - (move + 1)] != 0):
                             break
-                        elif(ranging == battleDict[unit][4] + 1 or attacks == 0):
+                        elif(ranging == battleDict[unit][4] + 1 or attacks == 0) and (attacking == True):
                             attacking = False
                             ranging = 1
                         elif(attacks >= 1 and attacking == True):
