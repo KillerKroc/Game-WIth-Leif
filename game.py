@@ -375,7 +375,7 @@ def main():
                                     enemyUpkeep = enemyUpkeep - battleDict[target][6]
                                     enemyAp = enemyAp + battleDict[target][5]
                                     #remove dead unit here and now
-                                    if(board.index(target) == 6):
+                                    if(board.index(target) % 7 == 0):
                                         board[board.index(target)] = -2
                                     else:
                                         board[board.index(target)] = 0
@@ -387,8 +387,9 @@ def main():
                                 move = move + 1
                                 attacking = True
                     newPosition = board.index(unit) - move
-                    if(board.index(unit) % 7 == 0):
+                    if(board.index(unit) % 7 == 6):
                         board[board.index(unit)] = -1
+                        print("settospawn")
                     else:
                         board[board.index(unit)] = 0
                     board[newPosition] = unit
@@ -430,7 +431,7 @@ def main():
                                     playerUpkeep = playerUpkeep - battleDict[target][6]
                                     playerAp = playerAp + battleDict[target][5]
                                     #remove dead unit here and now
-                                    if(board.index(target) == 0):
+                                    if(board.index(target) % 7 == 0):
                                         board[board.index(target)] = -1
                                     else:
                                         board[board.index(target)] = 0
