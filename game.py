@@ -404,12 +404,20 @@ def main():
                 attacks = font.render(f"Multiattack {battleDict[displayUnit][3]}x", True, (0, 0, 0))
                 blit(attacks, screen, 1505, abilities * 50 + 300)
                 abilities = abilities + 1
+            if battleDict[displayUnit][10] >= 1:
+                attacks = font.render(f"Splash {battleDict[displayUnit][10]}", True, (0, 0, 0))
+                blit(attacks, screen, 1505, abilities * 50 + 300)
+                abilities = abilities + 1
             if battleDict[displayUnit][7] >= 1:
-                taunt = font.render(f"Taunt: {battleDict[displayUnit][7]} Turns", True, (0, 0, 0))
+                taunt = font.render(f"Taunt {battleDict[displayUnit][7]} Turns", True, (0, 0, 0))
+                blit(taunt, screen, 1505, abilities * 50 + 300)
+                abilities = abilities + 1
+            if battleDict[displayUnit][8] >= 1:
+                taunt = font.render(f"Heal {battleDict[displayUnit][8]}", True, (0, 0, 0))
                 blit(taunt, screen, 1505, abilities * 50 + 300)
                 abilities = abilities + 1
             if battleDict[displayUnit][9] >= 1:
-                berserk = font.render(f"Berserk: +{battleDict[displayUnit][9]}/Turn", True, (0, 0, 0))
+                berserk = font.render(f"Berserk +{battleDict[displayUnit][9]}/Turn", True, (0, 0, 0))
                 blit(berserk, screen, 1505, abilities * 50 + 300)
                 abilities = abilities + 1
             if battleDict[displayUnit][11] >= 1:
@@ -516,6 +524,51 @@ def main():
                             elif (target >= 16):
                                 battleDict[target][1] = battleDict[target][1] - battleDict[unit][0]
                                 battleDict[target][11] = battleDict[unit][7]
+                                if battleDict[unit][10] >= 1:
+                                    if board.index(target) + 1 <= 20 and board.index(target) + 1 >= 0:
+                                        if board[board.index(target) + 1] >= 16:
+                                            battleDict[board[board.index(target) + 1]][1] = battleDict[board[board.index(target) + 1]][1] - battleDict[unit][10]
+                                            if battleDict[board[board.index(target) + 1]][1] <= 0:
+                                                enemyUpkeep = enemyUpkeep - battleDict[board[board.index(target) + 1]][6]
+                                                enemyAp = enemyAp + battleDict[board[board.index(target) + 1]][5]
+                                                #remove dead unit here and now
+                                                if(board.index(target + 1) % 7 == 0):
+                                                    board[board.index(target + 1)] = -2
+                                                else:
+                                                    board[board.index(target + 1)] = 0
+                                    if board.index(target) - 1 <= 20 and board.index(target) - 1 >= 0:
+                                        if board[board.index(target) - 1] >= 16:
+                                            battleDict[board[board.index(target) - 1]][1] = battleDict[board[board.index(target) - 1]][1] - battleDict[unit][10]
+                                            if(battleDict[board[board.index(target) - 1]][1] <= 0):
+                                                enemyUpkeep = enemyUpkeep - battleDict[board[board.index(target) - 1]][6]
+                                                enemyAp = enemyAp + battleDict[board[board.index(target) - 1]][5]
+                                                #remove dead unit here and now
+                                                if(board.index(target - 1) % 7 == 0):
+                                                    board[board.index(target - 1)] = -2
+                                                else:
+                                                    board[board.index(target - 1)] = 0
+                                    if board.index(target) + 7 <= 20 and board.index(target) + 7 >= 0:
+                                        if board[board.index(target) + 7] >= 16:
+                                            battleDict[board[board.index(target) + 7]][1] = battleDict[board[board.index(target) + 7]][1] - battleDict[unit][10]
+                                            if(battleDict[board[board.index(target) + 7]][1] <= 0):
+                                                enemyUpkeep = enemyUpkeep - battleDict[board[board.index(target) + 7]][6]
+                                                enemyAp = enemyAp + battleDict[board[board.index(target) + 7]][5]
+                                                #remove dead unit here and now
+                                                if(board.index(target + 7) % 7 == 0):
+                                                    board[board.index(target + 7)] = -2
+                                                else:
+                                                    board[board.index(target + 7)] = 0
+                                    if board.index(target) - 7 <= 20 and board.index(target) - 7 >= 0:
+                                        if board[board.index(target) - 7] >= 16:
+                                            battleDict[board[board.index(target) - 7]][1] = battleDict[board[board.index(target) - 7]][1] - battleDict[unit][10]
+                                            if(battleDict[board[board.index(target) - 7]][1] <= 0):
+                                                enemyUpkeep = enemyUpkeep - battleDict[board[board.index(target) - 7]][6]
+                                                enemyAp = enemyAp + battleDict[board[board.index(target) - 7]][5]
+                                                #remove dead unit here and now
+                                                if(board.index(target - 7) % 7 == 0):
+                                                    board[board.index(target - 7)] = -2
+                                                else:
+                                                    board[board.index(target - 7)] = 0
                                 if(battleDict[target][1] <= 0):
                                     enemyUpkeep = enemyUpkeep - battleDict[target][6]
                                     enemyAp = enemyAp + battleDict[target][5]
@@ -582,6 +635,51 @@ def main():
                             elif (target >= 1 and target <= 15):
                                 battleDict[target][1] = battleDict[target][1] - battleDict[unit][0]
                                 battleDict[target][11] = battleDict[unit][7]
+                                if battleDict[unit][10] >= 1:
+                                    if board.index(target) + 1 <= 20 and board.index(target) + 1 >= 0:
+                                        if board[board.index(target) + 1] >= 1 and board[board.index(target) + 1] <= 15:
+                                            battleDict[board[board.index(target) + 1]][1] = battleDict[board[board.index(target) + 1]][1] - battleDict[unit][10]
+                                            if battleDict[board[board.index(target) + 1]][1] <= 0:
+                                                playerUpkeep = playerUpkeep - battleDict[board[board.index(target) + 1]][6]
+                                                playerAp = playerAp + battleDict[board[board.index(target) + 1]][5]
+                                                #remove dead unit here and now
+                                                if(board.index(target + 1) % 7 == 0):
+                                                    board[board.index(target + 1)] = -1
+                                                else:
+                                                    board[board.index(target + 1)] = 0
+                                    if board.index(target) - 1 <= 20 and board.index(target) - 1 >= 0:
+                                        if board[board.index(target) - 1] >= 1 and board[board.index(target) - 1] <= 15:
+                                            battleDict[board[board.index(target) - 1]][1] = battleDict[board[board.index(target) - 1]][1] - battleDict[unit][10]
+                                            if(battleDict[board[board.index(target) - 1]][1] <= 0):
+                                                playerUpkeep = playerUpkeep - battleDict[board[board.index(target) - 1]][6]
+                                                playerAp = playerAp + battleDict[board[board.index(target) - 1]][5]
+                                                #remove dead unit here and now
+                                                if(board.index(target - 1) % 7 == 0):
+                                                    board[board.index(target - 1)] = -1
+                                                else:
+                                                    board[board.index(target - 1)] = 0
+                                    if board.index(target) + 7 <= 20 and board.index(target) + 7 >= 0:
+                                        if board[board.index(target) + 7] >= 1 and board[board.index(target) + 7] <= 15:
+                                            battleDict[board[board.index(target) + 7]][1] = battleDict[board[board.index(target) + 7]][1] - battleDict[unit][10]
+                                            if(battleDict[board[board.index(target) + 7]][1] <= 0):
+                                                playerUpkeep = playerUpkeep - battleDict[board[board.index(target) + 7]][6]
+                                                playerAp = playerAp + battleDict[board[board.index(target) + 7]][5]
+                                                #remove dead unit here and now
+                                                if(board.index(target + 7) % 7 == 0):
+                                                    board[board.index(target + 7)] = -1
+                                                else:
+                                                    board[board.index(target + 7)] = 0
+                                    if board.index(target) - 7 <= 20 and board.index(target) - 7 >= 0:
+                                        if board[board.index(target) - 7] >= 1 and board[board.index(target) - 7] <= 15:
+                                            battleDict[board[board.index(target) - 7]][1] = battleDict[board[board.index(target) - 7]][1] - battleDict[unit][10]
+                                            if(battleDict[board[board.index(target) - 7]][1] <= 0):
+                                                playerUpkeep = playerUpkeep - battleDict[board[board.index(target) - 7]][6]
+                                                playerAp = playerAp + battleDict[board[board.index(target) - 7]][5]
+                                                #remove dead unit here and now
+                                                if(board.index(target - 7) % 7 == 0):
+                                                    board[board.index(target - 7)] = -1
+                                                else:
+                                                    board[board.index(target - 7)] = 0
                                 if(battleDict[target][1] <= 0):
                                     playerUpkeep = playerUpkeep - battleDict[target][6]
                                     playerAp = playerAp + battleDict[target][5]
