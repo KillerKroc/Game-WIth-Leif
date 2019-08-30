@@ -41,7 +41,7 @@ player = True
 displayUnit = 0
 
 #the mouse
-mouse = [(0,0), 0] #(pos, b1)
+mouse = [(0,0), 0, 0, 0, 0, 0, 0] #(pos, b1,b2,b3,b4,b5,b6)
 
 #Creates a list to represent the player's deck
 playerDeck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -95,68 +95,68 @@ equipment = {
 deckList = {
         "name1": "orc",
         "equip1": "dogslicer",
-        "name2": "goblin",
+        "name2": "orc",
         "equip2": "dogslicer",
-        "name3": "goblin",
-        "equip3": "dogslicer",
+        "name3": "orc",
+        "equip3": "",
         "name4": "orc",
-        "equip4": "knives",
-        "name5": "orc",
+        "equip4": "",
+        "name5": "goblin",
         "equip5": "knives",
         "name6": "goblin",
         "equip6": "knives",
         "name7": "goblin",
-        "equip7": "knives",
-        "name8": "orc",
+        "equip7": "bow",
+        "name8": "goblin",
         "equip8": "bow",
-        "name9": "orc",
-        "equip9": "bow",
+        "name9": "goblin",
+        "equip9": "",
         "name10": "goblin",
-        "equip10": "bow",
+        "equip10": "",
         "name11": "goblin",
-        "equip11": "bow",
-        "name12": "orc",
+        "equip11": "staff",
+        "name12": "goblin",
         "equip12": "staff",
         "name13": "orc",
         "equip13": "staff",
-        "name14": "goblin",
+        "name14": "orc",
         "equip14": "staff",
-        "name15": "goblin",
-        "equip15": "staff"
+        "name15": "orc",
+        "equip15": "bow"
         }
 
 #the units and equipment in the enemy's deck
 encList = {
         "name1": "orc",
         "equip1": "dogslicer",
-        "name2": "goblin",
+        "name2": "orc",
         "equip2": "dogslicer",
-        "name3": "goblin",
-        "equip3": "dogslicer",
+        "name3": "orc",
+        "equip3": "",
         "name4": "orc",
-        "equip4": "knives",
-        "name5": "orc",
+        "equip4": "",
+        "name5": "goblin",
         "equip5": "knives",
         "name6": "goblin",
         "equip6": "knives",
         "name7": "goblin",
-        "equip7": "knives",
-        "name8": "orc",
+        "equip7": "bow",
+        "name8": "goblin",
         "equip8": "bow",
-        "name9": "orc",
-        "equip9": "bow",
+        "name9": "goblin",
+        "equip9": "",
         "name10": "goblin",
-        "equip10": "bow",
+        "equip10": "",
         "name11": "goblin",
-        "equip11": "bow",
-        "name12": "orc",
+        "equip11": "staff",
+        "name12": "goblin",
         "equip12": "staff",
         "name13": "orc",
         "equip13": "staff",
-        "name14": "goblin",
+        "name14": "orc",
         "equip14": "staff",
-        "name15": "goblin",
-        "equip15": "staff"
+        "name15": "orc",
+        "equip15": "bow"
         }
 
 #the art of units in both decks
