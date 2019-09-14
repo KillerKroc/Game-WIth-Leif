@@ -24,13 +24,16 @@ combatButton = pygame.image.load("fight.png")
 selector = pygame.image.load("select.png")
 hand = pygame.image.load("hand.png")
 background = pygame.image.load("background.png")
+spells = pygame.image.load("spells.png")
 #define variables
 playerHp = 10
 enemyHp = 10
 playerTurn = True
 combat = False
 playerAp = 1
+playerTotalAp = 1
 enemyAp = 1
+enemyTotalAp = 1
 playerUpkeep = 0
 enemyUpkeep = 0
 active = 0
@@ -368,23 +371,24 @@ def main():
         global displayUnit
         if (playerTurn == True):
             deckCounter = font.render(f"Deck: {len(playerDeck)}", True, (0, 0, 0))
-            apCounter = font.render(f"Command Points: {playerAp + playerUpkeep}", True, (0, 0, 0))
+            apCounter = font.render(f"Command Points: {playerTotalAp}", True, (0, 0, 0))
             apBreakdown = font.render(f"Available: {playerAp} In Use: {playerUpkeep}", True, (0, 0, 0))
         if (playerTurn == False):
             deckCounter = font.render(f"Deck: {len(enemyDeck)}", True, (0, 0, 0))
-            apCounter = font.render(f"Command Points: {enemyAp + enemyUpkeep}", True, (0, 0, 0))
+            apCounter = font.render(f"Command Points: {enemyTotalAp}", True, (0, 0, 0))
             apBreakdown = font.render(f"Available: {enemyAp} In Use: {enemyUpkeep}", True, (0, 0, 0))
         playerHpCounter = font.render(f"Hitpoints: {playerHp}", True, (0, 0, 0))
         enemyHpCounter = font.render(f"Enemy Hitpoints: {enemyHp}", True, (0, 0, 0))
         blit(background, screen, 0, 0)
         blit(field, screen, 425, 0)
-        blit(hand, screen, 425, 840)
+        blit(hand, screen, 875, 840)
         blit(deckCounter, screen, 0, 50)
         blit(playerHpCounter, screen, 0, 150)
         blit(enemyHpCounter, screen, 0, 200)
         blit(apCounter, screen, 0, 300)
         blit(apBreakdown, screen, 0, 350)
         blit(combatButton, screen, 1670, 520)
+        blit(spells, screen, 125, 840)
         if displayUnit >= 1:
             #if displayUnit >= 16:
                 #name = font.render(f"{encList[f'name{displayUnit - 15}']} with {encList[f'equip{displayUnit - 15}']}", True, (0, 0, 0))
@@ -428,18 +432,18 @@ def main():
             for card in playerHand:
                 dmg = font.render(f"{battleDict[card][0]}", True, (255, 0, 0))
                 hp = font.render(f"{battleDict[card][1]}", True, (0, 255, 0))
-                blit(artDict[card][0], screen, 150 * playerHand.index(card) + 445, 906)
-                blit(artDict[card][1], screen, 150 * playerHand.index(card) + 445, 906)
-                blit(dmg, screen, 150 * playerHand.index(card) + 445 + 10, 906 - 30)
-                blit(hp, screen, 150 * playerHand.index(card) + 445 + 80, 906 - 30)
+                blit(artDict[card][0], screen, 150 * playerHand.index(card) + 895, 906)
+                blit(artDict[card][1], screen, 150 * playerHand.index(card) + 895, 906)
+                blit(dmg, screen, 150 * playerHand.index(card) + 895 + 10, 906 - 30)
+                blit(hp, screen, 150 * playerHand.index(card) + 895 + 80, 906 - 30)
         if (playerTurn == False):
             for card in enemyHand:
                 dmg = font.render(f"{battleDict[card][0]}", True, (255, 0, 0))
                 hp = font.render(f"{battleDict[card][1]}", True, (0, 255, 0))
-                blit(artDict[card][0], screen, 150 * enemyHand.index(card) + 445, 906)
-                blit(artDict[card][1], screen, 150 * enemyHand.index(card) + 445, 906)
-                blit(dmg, screen, 150 * enemyHand.index(card) + 445 + 10, 906 - 30)
-                blit(hp, screen, 150 * enemyHand.index(card) + 445 + 80, 906 - 30)
+                blit(artDict[card][0], screen, 150 * enemyHand.index(card) + 895, 906)
+                blit(artDict[card][1], screen, 150 * enemyHand.index(card) + 895, 906)
+                blit(dmg, screen, 150 * enemyHand.index(card) + 895 + 10, 906 - 30)
+                blit(hp, screen, 150 * enemyHand.index(card) + 895 + 80, 906 - 30)
         for card in board:
             if(combat == True and PlayerTurn == True):
                 board.reverse()
@@ -493,6 +497,8 @@ def main():
         global enemyAp
         global active
         global move
+        global playerTotalAp
+        global enemyTotalAp
         if (playerTurn == True):
             board.reverse()
             for unit in board:
@@ -530,7 +536,6 @@ def main():
                                             battleDict[board[board.index(target) + 1]][1] = battleDict[board[board.index(target) + 1]][1] - battleDict[unit][10]
                                             if battleDict[board[board.index(target) + 1]][1] <= 0:
                                                 enemyUpkeep = enemyUpkeep - battleDict[board[board.index(target) + 1]][6]
-                                                enemyAp = enemyAp + battleDict[board[board.index(target) + 1]][5]
                                                 #remove dead unit here and now
                                                 if(board.index(target + 1) % 7 == 0):
                                                     board[board.index(target + 1)] = -2
@@ -541,7 +546,6 @@ def main():
                                             battleDict[board[board.index(target) - 1]][1] = battleDict[board[board.index(target) - 1]][1] - battleDict[unit][10]
                                             if(battleDict[board[board.index(target) - 1]][1] <= 0):
                                                 enemyUpkeep = enemyUpkeep - battleDict[board[board.index(target) - 1]][6]
-                                                enemyAp = enemyAp + battleDict[board[board.index(target) - 1]][5]
                                                 #remove dead unit here and now
                                                 if(board.index(target - 1) % 7 == 0):
                                                     board[board.index(target - 1)] = -2
@@ -552,7 +556,6 @@ def main():
                                             battleDict[board[board.index(target) + 7]][1] = battleDict[board[board.index(target) + 7]][1] - battleDict[unit][10]
                                             if(battleDict[board[board.index(target) + 7]][1] <= 0):
                                                 enemyUpkeep = enemyUpkeep - battleDict[board[board.index(target) + 7]][6]
-                                                enemyAp = enemyAp + battleDict[board[board.index(target) + 7]][5]
                                                 #remove dead unit here and now
                                                 if(board.index(target + 7) % 7 == 0):
                                                     board[board.index(target + 7)] = -2
@@ -563,7 +566,6 @@ def main():
                                             battleDict[board[board.index(target) - 7]][1] = battleDict[board[board.index(target) - 7]][1] - battleDict[unit][10]
                                             if(battleDict[board[board.index(target) - 7]][1] <= 0):
                                                 enemyUpkeep = enemyUpkeep - battleDict[board[board.index(target) - 7]][6]
-                                                enemyAp = enemyAp + battleDict[board[board.index(target) - 7]][5]
                                                 #remove dead unit here and now
                                                 if(board.index(target - 7) % 7 == 0):
                                                     board[board.index(target - 7)] = -2
@@ -571,7 +573,6 @@ def main():
                                                     board[board.index(target - 7)] = 0
                                 if(battleDict[target][1] <= 0):
                                     enemyUpkeep = enemyUpkeep - battleDict[target][6]
-                                    enemyAp = enemyAp + battleDict[target][5]
                                     #remove dead unit here and now
                                     if(board.index(target) % 7 == 0):
                                         board[board.index(target)] = -2
@@ -601,8 +602,8 @@ def main():
                         board[board.index(unit)] = 0
                     board[newPosition] = unit
             board.reverse()
-            if(playerAp + playerUpkeep <= 4):
-                playerAp = playerAp + 1
+            if(playerTotalAp <= 4):
+                playerTotalAp = playerTotalAp + 1
             playerTurn = False
             drawCard(player == True)
         elif (playerTurn == False):
@@ -641,7 +642,6 @@ def main():
                                             battleDict[board[board.index(target) + 1]][1] = battleDict[board[board.index(target) + 1]][1] - battleDict[unit][10]
                                             if battleDict[board[board.index(target) + 1]][1] <= 0:
                                                 playerUpkeep = playerUpkeep - battleDict[board[board.index(target) + 1]][6]
-                                                playerAp = playerAp + battleDict[board[board.index(target) + 1]][5]
                                                 #remove dead unit here and now
                                                 if(board.index(target + 1) % 7 == 0):
                                                     board[board.index(target + 1)] = -1
@@ -652,7 +652,6 @@ def main():
                                             battleDict[board[board.index(target) - 1]][1] = battleDict[board[board.index(target) - 1]][1] - battleDict[unit][10]
                                             if(battleDict[board[board.index(target) - 1]][1] <= 0):
                                                 playerUpkeep = playerUpkeep - battleDict[board[board.index(target) - 1]][6]
-                                                playerAp = playerAp + battleDict[board[board.index(target) - 1]][5]
                                                 #remove dead unit here and now
                                                 if(board.index(target - 1) % 7 == 0):
                                                     board[board.index(target - 1)] = -1
@@ -663,7 +662,6 @@ def main():
                                             battleDict[board[board.index(target) + 7]][1] = battleDict[board[board.index(target) + 7]][1] - battleDict[unit][10]
                                             if(battleDict[board[board.index(target) + 7]][1] <= 0):
                                                 playerUpkeep = playerUpkeep - battleDict[board[board.index(target) + 7]][6]
-                                                playerAp = playerAp + battleDict[board[board.index(target) + 7]][5]
                                                 #remove dead unit here and now
                                                 if(board.index(target + 7) % 7 == 0):
                                                     board[board.index(target + 7)] = -1
@@ -674,7 +672,6 @@ def main():
                                             battleDict[board[board.index(target) - 7]][1] = battleDict[board[board.index(target) - 7]][1] - battleDict[unit][10]
                                             if(battleDict[board[board.index(target) - 7]][1] <= 0):
                                                 playerUpkeep = playerUpkeep - battleDict[board[board.index(target) - 7]][6]
-                                                playerAp = playerAp + battleDict[board[board.index(target) - 7]][5]
                                                 #remove dead unit here and now
                                                 if(board.index(target - 7) % 7 == 0):
                                                     board[board.index(target - 7)] = -1
@@ -682,7 +679,6 @@ def main():
                                                     board[board.index(target - 7)] = 0
                                 if(battleDict[target][1] <= 0):
                                     playerUpkeep = playerUpkeep - battleDict[target][6]
-                                    playerAp = playerAp + battleDict[target][5]
                                     #remove dead unit here and now
                                     if(board.index(target) % 7 == 0):
                                         board[board.index(target)] = -1
@@ -711,10 +707,12 @@ def main():
                     else:
                         board[board.index(unit)] = 0
                     board[newPosition] = unit
-            if(enemyAp + enemyUpkeep <= 4):
-                enemyAp = enemyAp + 1
+            if(enemyTotalAp <= 4):
+                enemyTotalAp = enemyTotalAp + 1
             playerTurn = True
             drawCard(player == False)
+        playerAp = playerTotalAp - playerUpkeep
+        enemyAp = enemyTotalAp - enemyUpkeep
         active = 0
         combat = False
     
@@ -792,9 +790,9 @@ def main():
                     else:
                         if(mouse[1] == 1):
                             removeSelectors()
-            elif((xpos - 435) // 150 >= 0 and (xpos - 435) // 150 <= len(playerHand) - 1):
+            elif((xpos - 885) // 150 >= 0 and (xpos - 885) // 150 <= len(playerHand) - 1):
                 if(ypos >= 850 and ypos <= 1070):
-                    index = (xpos - 435) // 150
+                    index = (xpos - 885) // 150
                     displayUnit = playerHand[index]
                     if(playerAp - battleDict[playerHand[index]][5] >= 0):
                         if(mouse[1] == 1):
@@ -849,9 +847,9 @@ def main():
                     else:
                         if(mouse[1] == 1):
                             removeSelectors()
-            elif((xpos - 435) // 150 >= 0 and (xpos - 435) // 150 <= len(enemyHand) - 1):
+            elif((xpos - 885) // 150 >= 0 and (xpos - 885) // 150 <= len(enemyHand) - 1):
                 if(ypos >= 850 and ypos <= 1070):
-                    index = (xpos - 435) // 150
+                    index = (xpos - 885) // 150
                     displayUnit = enemyHand[index]
                     if(enemyAp - battleDict[enemyHand[index]][5] >= 0):
                         if(mouse[1] == 1):
