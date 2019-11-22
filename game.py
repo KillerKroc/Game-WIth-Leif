@@ -11,6 +11,13 @@ Created on Fri Jul 12 10:19:12 2019
 #add vehicles/steeds/environment/fortifications
 #add multiple types of equipment
 #some creatures might only be able to use certain types of equipment
+#trample
+#counterspell (u iz mukkin about)
+#kopy kobold
+#goblin cannon
+#goblin airstrike?
+#bugbears +1 racial range
+#trample flying reach
 
 
 import random
@@ -70,21 +77,26 @@ board = [-1, 0, 0, 0, 0, 0, -2,
          -1, 0, 0, 0, 0, 0, -2,
          -1, 0, 0, 0, 0, 0, -2]
 
+selectBoard = [0, 0, 0, 0, 0, 0, 0,
+               0, 0, 0, 0, 0, 0, 0,
+               0, 0, 0, 0, 0, 0, 0]
+
 #the stats of the creatures in the game (some might not be allowed certain equipment implement when we need)
 creatures = {
-        #[damage, health, movement, attacks, range, cost, upkeep], [taunt, heal, berserk, splash]
-        "orc": [[2, 4, 1, 1, 1, 1, 1], [0, 0, 0 ,0]],
-        "goblin": [[3, 2, 1, 1, 1, 1, 1], [0, 0, 0, 0]]
+        #[damage, health, movement, attacks, range, cost, upkeep], [taunt, heal, berserk, splash, embark capacity]
+        "orc": [[2, 4, 1, 1, 1, 1, 1], [0, 0, 0 ,0, 0]],
+        "goblin": [[3, 2, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0]],
+        "warbear": [[3, 6, 1, 1, 1, 2, 1], [0, 0, 0, 0, 1]]
         }
 
 #the stats of equipment in the game (might make seperate one for armor, weapons, runes, artifacts, etc)
 equipment = {
-        #[damage, health, movement, attacks, range, cost, upkeep], [taunt, heal, berserk, splash]
-        "dogslicer": [[1, 2, 1, 0, 0, 0, 0], [0, 0, 1, 0]],
-        "knives": [[0, 2, 2, 1, 0, 0, 0], [0, 0, 0, 0]],
-        "bow": [[2, 0, 0, 0, 2, 0, 0], [0, 0, 0, 2]],
-        "staff":[[1, 2, 0, 0, 1, 0, 0], [0, 2, 0, 0]],
-        "": [[0, 6, 1, 0, 0, 0, 0], [2, 0, 0, 0]]
+        #[damage, health, movement, attacks, range, cost, upkeep], [taunt, heal, berserk, splash, embark capacity]
+        "dogslicer": [[1, 2, 1, 0, 0, 0, 0], [0, 0, 1, 0, 0]],
+        "knives": [[0, 2, 2, 1, 0, 0, 0], [0, 0, 0, 0, 0]],
+        "bow": [[2, 0, 0, 0, 2, 0, 0], [0, 0, 0, 2, 0]],
+        "staff":[[1, 2, 0, 0, 1, 0, 0], [0, 2, 0, 0, 0]],
+        "": [[0, 6, 1, 0, 0, 0, 0], [2, 0, 0, 0, 0]]
         }
 
 #the units and equipment in the player's deck
@@ -191,102 +203,102 @@ artDict = {
 
 #the stats of the units in the player's deck
 deckStats = {
-        #[damage, health, movement, attacks, range, cost, upkeep], [taunt, heal, berserk, splash], [taunted]
+        #[damage, health, movement, attacks, range, cost, upkeep], [taunt, heal, berserk, splash], [taunted, carrying]
         1: [[creatures[deckList["name1"]][0][0] + equipment[deckList["equip1"]][0][0], creatures[deckList["name1"]][0][1] + equipment[deckList["equip1"]][0][1], creatures[deckList["name1"]][0][2] + equipment[deckList["equip1"]][0][2], creatures[deckList["name1"]][0][3] + equipment[deckList["equip1"]][0][3], creatures[deckList["name1"]][0][4] + equipment[deckList["equip1"]][0][4], creatures[deckList["name1"]][0][5] + equipment[deckList["equip1"]][0][5], creatures[deckList["name1"]][0][6] + equipment[deckList["equip1"]][0][6]],
-            [creatures[deckList["name1"]][1][0] + equipment[deckList["equip1"]][1][0], creatures[deckList["name1"]][1][1] + equipment[deckList["equip1"]][1][1], creatures[deckList["name1"]][1][2] + equipment[deckList["equip1"]][1][2], creatures[deckList["name1"]][1][3] + equipment[deckList["equip1"]][1][3]],
-            [0]],
+            [creatures[deckList["name1"]][1][0] + equipment[deckList["equip1"]][1][0], creatures[deckList["name1"]][1][1] + equipment[deckList["equip1"]][1][1], creatures[deckList["name1"]][1][2] + equipment[deckList["equip1"]][1][2], creatures[deckList["name1"]][1][3] + equipment[deckList["equip1"]][1][3], creatures[deckList["name1"]][1][4] + equipment[deckList["equip1"]][1][4]],
+            [0, 0]],
         2: [[creatures[deckList["name2"]][0][0] + equipment[deckList["equip2"]][0][0], creatures[deckList["name2"]][0][1] + equipment[deckList["equip2"]][0][1], creatures[deckList["name2"]][0][2] + equipment[deckList["equip2"]][0][2], creatures[deckList["name2"]][0][3] + equipment[deckList["equip2"]][0][3], creatures[deckList["name2"]][0][4] + equipment[deckList["equip2"]][0][4], creatures[deckList["name2"]][0][5] + equipment[deckList["equip2"]][0][5], creatures[deckList["name2"]][0][6] + equipment[deckList["equip2"]][0][6]],
-            [creatures[deckList["name2"]][1][0] + equipment[deckList["equip2"]][1][0], creatures[deckList["name2"]][1][1] + equipment[deckList["equip2"]][1][1], creatures[deckList["name2"]][1][2] + equipment[deckList["equip2"]][1][2], creatures[deckList["name2"]][1][3] + equipment[deckList["equip2"]][1][3]],
-            [0]],
+            [creatures[deckList["name2"]][1][0] + equipment[deckList["equip2"]][1][0], creatures[deckList["name2"]][1][1] + equipment[deckList["equip2"]][1][1], creatures[deckList["name2"]][1][2] + equipment[deckList["equip2"]][1][2], creatures[deckList["name2"]][1][3] + equipment[deckList["equip2"]][1][3], creatures[deckList["name2"]][1][4] + equipment[deckList["equip2"]][1][4]],
+            [0, 0]],
         3: [[creatures[deckList["name3"]][0][0] + equipment[deckList["equip3"]][0][0], creatures[deckList["name3"]][0][1] + equipment[deckList["equip3"]][0][1], creatures[deckList["name3"]][0][2] + equipment[deckList["equip3"]][0][2], creatures[deckList["name3"]][0][3] + equipment[deckList["equip3"]][0][3], creatures[deckList["name3"]][0][4] + equipment[deckList["equip3"]][0][4], creatures[deckList["name3"]][0][5] + equipment[deckList["equip3"]][0][5], creatures[deckList["name3"]][0][6] + equipment[deckList["equip3"]][0][6]],
-            [creatures[deckList["name3"]][1][0] + equipment[deckList["equip3"]][1][0], creatures[deckList["name3"]][1][1] + equipment[deckList["equip3"]][1][1], creatures[deckList["name3"]][1][2] + equipment[deckList["equip3"]][1][2], creatures[deckList["name3"]][1][3] + equipment[deckList["equip3"]][1][3]],
-            [0]],
+            [creatures[deckList["name3"]][1][0] + equipment[deckList["equip3"]][1][0], creatures[deckList["name3"]][1][1] + equipment[deckList["equip3"]][1][1], creatures[deckList["name3"]][1][2] + equipment[deckList["equip3"]][1][2], creatures[deckList["name3"]][1][3] + equipment[deckList["equip3"]][1][3], creatures[deckList["name3"]][1][4] + equipment[deckList["equip3"]][1][4]],
+            [0, 0]],
         4: [[creatures[deckList["name4"]][0][0] + equipment[deckList["equip4"]][0][0], creatures[deckList["name4"]][0][1] + equipment[deckList["equip4"]][0][1], creatures[deckList["name4"]][0][2] + equipment[deckList["equip4"]][0][2], creatures[deckList["name4"]][0][3] + equipment[deckList["equip4"]][0][3], creatures[deckList["name4"]][0][4] + equipment[deckList["equip4"]][0][4], creatures[deckList["name4"]][0][5] + equipment[deckList["equip4"]][0][5], creatures[deckList["name4"]][0][6] + equipment[deckList["equip4"]][0][6]],
-            [creatures[deckList["name4"]][1][0] + equipment[deckList["equip4"]][1][0], creatures[deckList["name4"]][1][1] + equipment[deckList["equip4"]][1][1], creatures[deckList["name4"]][1][2] + equipment[deckList["equip4"]][1][2], creatures[deckList["name4"]][1][3] + equipment[deckList["equip4"]][1][3]],
-            [0]],
+            [creatures[deckList["name4"]][1][0] + equipment[deckList["equip4"]][1][0], creatures[deckList["name4"]][1][1] + equipment[deckList["equip4"]][1][1], creatures[deckList["name4"]][1][2] + equipment[deckList["equip4"]][1][2], creatures[deckList["name4"]][1][3] + equipment[deckList["equip4"]][1][3], creatures[deckList["name4"]][1][4] + equipment[deckList["equip4"]][1][4]],
+            [0, 0]],
         5: [[creatures[deckList["name5"]][0][0] + equipment[deckList["equip5"]][0][0], creatures[deckList["name5"]][0][1] + equipment[deckList["equip5"]][0][1], creatures[deckList["name5"]][0][2] + equipment[deckList["equip5"]][0][2], creatures[deckList["name5"]][0][3] + equipment[deckList["equip5"]][0][3], creatures[deckList["name5"]][0][4] + equipment[deckList["equip5"]][0][4], creatures[deckList["name5"]][0][5] + equipment[deckList["equip5"]][0][5], creatures[deckList["name5"]][0][6] + equipment[deckList["equip5"]][0][6]],
-            [creatures[deckList["name5"]][1][0] + equipment[deckList["equip5"]][1][0], creatures[deckList["name5"]][1][1] + equipment[deckList["equip5"]][1][1], creatures[deckList["name5"]][1][2] + equipment[deckList["equip5"]][1][2], creatures[deckList["name5"]][1][3] + equipment[deckList["equip5"]][1][3]],
-            [0]],
+            [creatures[deckList["name5"]][1][0] + equipment[deckList["equip5"]][1][0], creatures[deckList["name5"]][1][1] + equipment[deckList["equip5"]][1][1], creatures[deckList["name5"]][1][2] + equipment[deckList["equip5"]][1][2], creatures[deckList["name5"]][1][3] + equipment[deckList["equip5"]][1][3], creatures[deckList["name5"]][1][4] + equipment[deckList["equip5"]][1][4]],
+            [0, 0]],
         6: [[creatures[deckList["name6"]][0][0] + equipment[deckList["equip6"]][0][0], creatures[deckList["name6"]][0][1] + equipment[deckList["equip6"]][0][1], creatures[deckList["name6"]][0][2] + equipment[deckList["equip6"]][0][2], creatures[deckList["name6"]][0][3] + equipment[deckList["equip6"]][0][3], creatures[deckList["name6"]][0][4] + equipment[deckList["equip6"]][0][4], creatures[deckList["name6"]][0][5] + equipment[deckList["equip6"]][0][5], creatures[deckList["name6"]][0][6] + equipment[deckList["equip6"]][0][6]],
-            [creatures[deckList["name6"]][1][0] + equipment[deckList["equip6"]][1][0], creatures[deckList["name6"]][1][1] + equipment[deckList["equip6"]][1][1], creatures[deckList["name6"]][1][2] + equipment[deckList["equip6"]][1][2], creatures[deckList["name6"]][1][3] + equipment[deckList["equip6"]][1][3]],
-            [0]],
+            [creatures[deckList["name6"]][1][0] + equipment[deckList["equip6"]][1][0], creatures[deckList["name6"]][1][1] + equipment[deckList["equip6"]][1][1], creatures[deckList["name6"]][1][2] + equipment[deckList["equip6"]][1][2], creatures[deckList["name6"]][1][3] + equipment[deckList["equip6"]][1][3], creatures[deckList["name6"]][1][4] + equipment[deckList["equip6"]][1][4]],
+            [0, 0]],
         7: [[creatures[deckList["name7"]][0][0] + equipment[deckList["equip7"]][0][0], creatures[deckList["name7"]][0][1] + equipment[deckList["equip7"]][0][1], creatures[deckList["name7"]][0][2] + equipment[deckList["equip7"]][0][2], creatures[deckList["name7"]][0][3] + equipment[deckList["equip7"]][0][3], creatures[deckList["name7"]][0][4] + equipment[deckList["equip7"]][0][4], creatures[deckList["name7"]][0][5] + equipment[deckList["equip7"]][0][5], creatures[deckList["name7"]][0][6] + equipment[deckList["equip7"]][0][6]],
-            [creatures[deckList["name7"]][1][0] + equipment[deckList["equip7"]][1][0], creatures[deckList["name7"]][1][1] + equipment[deckList["equip7"]][1][1], creatures[deckList["name7"]][1][2] + equipment[deckList["equip7"]][1][2], creatures[deckList["name7"]][1][3] + equipment[deckList["equip7"]][1][3]],
-            [0]],
+            [creatures[deckList["name7"]][1][0] + equipment[deckList["equip7"]][1][0], creatures[deckList["name7"]][1][1] + equipment[deckList["equip7"]][1][1], creatures[deckList["name7"]][1][2] + equipment[deckList["equip7"]][1][2], creatures[deckList["name7"]][1][3] + equipment[deckList["equip7"]][1][3], creatures[deckList["name7"]][1][4] + equipment[deckList["equip7"]][1][4]],
+            [0, 0]],
         8: [[creatures[deckList["name8"]][0][0] + equipment[deckList["equip8"]][0][0], creatures[deckList["name8"]][0][1] + equipment[deckList["equip8"]][0][1], creatures[deckList["name8"]][0][2] + equipment[deckList["equip8"]][0][2], creatures[deckList["name8"]][0][3] + equipment[deckList["equip8"]][0][3], creatures[deckList["name8"]][0][4] + equipment[deckList["equip8"]][0][4], creatures[deckList["name8"]][0][5] + equipment[deckList["equip8"]][0][5], creatures[deckList["name8"]][0][6] + equipment[deckList["equip8"]][0][6]],
-            [creatures[deckList["name8"]][1][0] + equipment[deckList["equip8"]][1][0], creatures[deckList["name8"]][1][1] + equipment[deckList["equip8"]][1][1], creatures[deckList["name8"]][1][2] + equipment[deckList["equip8"]][1][2], creatures[deckList["name8"]][1][3] + equipment[deckList["equip8"]][1][3]],
-            [0]],
+            [creatures[deckList["name8"]][1][0] + equipment[deckList["equip8"]][1][0], creatures[deckList["name8"]][1][1] + equipment[deckList["equip8"]][1][1], creatures[deckList["name8"]][1][2] + equipment[deckList["equip8"]][1][2], creatures[deckList["name8"]][1][3] + equipment[deckList["equip8"]][1][3], creatures[deckList["name8"]][1][4] + equipment[deckList["equip8"]][1][4]],
+            [0, 0]],
         9: [[creatures[deckList["name9"]][0][0] + equipment[deckList["equip9"]][0][0], creatures[deckList["name9"]][0][1] + equipment[deckList["equip9"]][0][1], creatures[deckList["name9"]][0][2] + equipment[deckList["equip9"]][0][2], creatures[deckList["name9"]][0][3] + equipment[deckList["equip9"]][0][3], creatures[deckList["name9"]][0][4] + equipment[deckList["equip9"]][0][4], creatures[deckList["name9"]][0][5] + equipment[deckList["equip9"]][0][5], creatures[deckList["name9"]][0][6] + equipment[deckList["equip9"]][0][6]],
-            [creatures[deckList["name9"]][1][0] + equipment[deckList["equip9"]][1][0], creatures[deckList["name9"]][1][1] + equipment[deckList["equip9"]][1][1], creatures[deckList["name9"]][1][2] + equipment[deckList["equip9"]][1][2], creatures[deckList["name9"]][1][3] + equipment[deckList["equip9"]][1][3]],
-            [0]],
+            [creatures[deckList["name9"]][1][0] + equipment[deckList["equip9"]][1][0], creatures[deckList["name9"]][1][1] + equipment[deckList["equip9"]][1][1], creatures[deckList["name9"]][1][2] + equipment[deckList["equip9"]][1][2], creatures[deckList["name9"]][1][3] + equipment[deckList["equip9"]][1][3], creatures[deckList["name9"]][1][4] + equipment[deckList["equip9"]][1][4]],
+            [0, 0]],
         10: [[creatures[deckList["name10"]][0][0] + equipment[deckList["equip10"]][0][0], creatures[deckList["name10"]][0][1] + equipment[deckList["equip10"]][0][1], creatures[deckList["name10"]][0][2] + equipment[deckList["equip10"]][0][2], creatures[deckList["name10"]][0][3] + equipment[deckList["equip10"]][0][3], creatures[deckList["name10"]][0][4] + equipment[deckList["equip10"]][0][4], creatures[deckList["name10"]][0][5] + equipment[deckList["equip10"]][0][5], creatures[deckList["name10"]][0][6] + equipment[deckList["equip10"]][0][6]],
-            [creatures[deckList["name10"]][1][0] + equipment[deckList["equip10"]][1][0], creatures[deckList["name10"]][1][1] + equipment[deckList["equip10"]][1][1], creatures[deckList["name10"]][1][2] + equipment[deckList["equip10"]][1][2], creatures[deckList["name10"]][1][3] + equipment[deckList["equip10"]][1][3]],
-            [0]],
+             [creatures[deckList["name10"]][1][0] + equipment[deckList["equip10"]][1][0], creatures[deckList["name10"]][1][1] + equipment[deckList["equip10"]][1][1], creatures[deckList["name10"]][1][2] + equipment[deckList["equip10"]][1][2], creatures[deckList["name10"]][1][3] + equipment[deckList["equip10"]][1][3], creatures[deckList["name10"]][1][4] + equipment[deckList["equip10"]][1][4]],
+             [0, 0]],
         11: [[creatures[deckList["name11"]][0][0] + equipment[deckList["equip11"]][0][0], creatures[deckList["name11"]][0][1] + equipment[deckList["equip11"]][0][1], creatures[deckList["name11"]][0][2] + equipment[deckList["equip11"]][0][2], creatures[deckList["name11"]][0][3] + equipment[deckList["equip11"]][0][3], creatures[deckList["name11"]][0][4] + equipment[deckList["equip11"]][0][4], creatures[deckList["name11"]][0][5] + equipment[deckList["equip11"]][0][5], creatures[deckList["name11"]][0][6] + equipment[deckList["equip11"]][0][6]],
-            [creatures[deckList["name11"]][1][0] + equipment[deckList["equip11"]][1][0], creatures[deckList["name11"]][1][1] + equipment[deckList["equip11"]][1][1], creatures[deckList["name11"]][1][2] + equipment[deckList["equip11"]][1][2], creatures[deckList["name11"]][1][3] + equipment[deckList["equip11"]][1][3]],
-            [0]],
+             [creatures[deckList["name11"]][1][0] + equipment[deckList["equip11"]][1][0], creatures[deckList["name11"]][1][1] + equipment[deckList["equip11"]][1][1], creatures[deckList["name11"]][1][2] + equipment[deckList["equip11"]][1][2], creatures[deckList["name11"]][1][3] + equipment[deckList["equip11"]][1][3], creatures[deckList["name11"]][1][4] + equipment[deckList["equip11"]][1][4]],
+             [0, 0]],
         12: [[creatures[deckList["name12"]][0][0] + equipment[deckList["equip12"]][0][0], creatures[deckList["name12"]][0][1] + equipment[deckList["equip12"]][0][1], creatures[deckList["name12"]][0][2] + equipment[deckList["equip12"]][0][2], creatures[deckList["name12"]][0][3] + equipment[deckList["equip12"]][0][3], creatures[deckList["name12"]][0][4] + equipment[deckList["equip12"]][0][4], creatures[deckList["name12"]][0][5] + equipment[deckList["equip12"]][0][5], creatures[deckList["name12"]][0][6] + equipment[deckList["equip12"]][0][6]],
-            [creatures[deckList["name12"]][1][0] + equipment[deckList["equip12"]][1][0], creatures[deckList["name12"]][1][1] + equipment[deckList["equip12"]][1][1], creatures[deckList["name12"]][1][2] + equipment[deckList["equip12"]][1][2], creatures[deckList["name12"]][1][3] + equipment[deckList["equip12"]][1][3]],
-            [0]],
+             [creatures[deckList["name12"]][1][0] + equipment[deckList["equip12"]][1][0], creatures[deckList["name12"]][1][1] + equipment[deckList["equip12"]][1][1], creatures[deckList["name12"]][1][2] + equipment[deckList["equip12"]][1][2], creatures[deckList["name12"]][1][3] + equipment[deckList["equip12"]][1][3], creatures[deckList["name12"]][1][4] + equipment[deckList["equip12"]][1][4]],
+             [0, 0]],
         13: [[creatures[deckList["name13"]][0][0] + equipment[deckList["equip13"]][0][0], creatures[deckList["name13"]][0][1] + equipment[deckList["equip13"]][0][1], creatures[deckList["name13"]][0][2] + equipment[deckList["equip13"]][0][2], creatures[deckList["name13"]][0][3] + equipment[deckList["equip13"]][0][3], creatures[deckList["name13"]][0][4] + equipment[deckList["equip13"]][0][4], creatures[deckList["name13"]][0][5] + equipment[deckList["equip13"]][0][5], creatures[deckList["name13"]][0][6] + equipment[deckList["equip13"]][0][6]],
-            [creatures[deckList["name13"]][1][0] + equipment[deckList["equip13"]][1][0], creatures[deckList["name13"]][1][1] + equipment[deckList["equip13"]][1][1], creatures[deckList["name13"]][1][2] + equipment[deckList["equip13"]][1][2], creatures[deckList["name13"]][1][3] + equipment[deckList["equip13"]][1][3]],
-            [0]],
+             [creatures[deckList["name13"]][1][0] + equipment[deckList["equip13"]][1][0], creatures[deckList["name13"]][1][1] + equipment[deckList["equip13"]][1][1], creatures[deckList["name13"]][1][2] + equipment[deckList["equip13"]][1][2], creatures[deckList["name13"]][1][3] + equipment[deckList["equip13"]][1][3], creatures[deckList["name13"]][1][4] + equipment[deckList["equip13"]][1][4]],
+             [0, 0]],
         14: [[creatures[deckList["name14"]][0][0] + equipment[deckList["equip14"]][0][0], creatures[deckList["name14"]][0][1] + equipment[deckList["equip14"]][0][1], creatures[deckList["name14"]][0][2] + equipment[deckList["equip14"]][0][2], creatures[deckList["name14"]][0][3] + equipment[deckList["equip14"]][0][3], creatures[deckList["name14"]][0][4] + equipment[deckList["equip14"]][0][4], creatures[deckList["name14"]][0][5] + equipment[deckList["equip14"]][0][5], creatures[deckList["name14"]][0][6] + equipment[deckList["equip14"]][0][6]],
-            [creatures[deckList["name14"]][1][0] + equipment[deckList["equip14"]][1][0], creatures[deckList["name14"]][1][1] + equipment[deckList["equip14"]][1][1], creatures[deckList["name14"]][1][2] + equipment[deckList["equip14"]][1][2], creatures[deckList["name14"]][1][3] + equipment[deckList["equip14"]][1][3]],
-            [0]],
+             [creatures[deckList["name14"]][1][0] + equipment[deckList["equip14"]][1][0], creatures[deckList["name14"]][1][1] + equipment[deckList["equip14"]][1][1], creatures[deckList["name14"]][1][2] + equipment[deckList["equip14"]][1][2], creatures[deckList["name14"]][1][3] + equipment[deckList["equip14"]][1][3], creatures[deckList["name14"]][1][4] + equipment[deckList["equip14"]][1][4]],
+             [0, 0]],
         15: [[creatures[deckList["name15"]][0][0] + equipment[deckList["equip15"]][0][0], creatures[deckList["name15"]][0][1] + equipment[deckList["equip15"]][0][1], creatures[deckList["name15"]][0][2] + equipment[deckList["equip15"]][0][2], creatures[deckList["name15"]][0][3] + equipment[deckList["equip15"]][0][3], creatures[deckList["name15"]][0][4] + equipment[deckList["equip15"]][0][4], creatures[deckList["name15"]][0][5] + equipment[deckList["equip15"]][0][5], creatures[deckList["name15"]][0][6] + equipment[deckList["equip15"]][0][6]],
-            [creatures[deckList["name15"]][1][0] + equipment[deckList["equip15"]][1][0], creatures[deckList["name15"]][1][1] + equipment[deckList["equip15"]][1][1], creatures[deckList["name15"]][1][2] + equipment[deckList["equip15"]][1][2], creatures[deckList["name15"]][1][3] + equipment[deckList["equip15"]][1][3]],
-            [0]]
+             [creatures[deckList["name15"]][1][0] + equipment[deckList["equip15"]][1][0], creatures[deckList["name15"]][1][1] + equipment[deckList["equip15"]][1][1], creatures[deckList["name15"]][1][2] + equipment[deckList["equip15"]][1][2], creatures[deckList["name15"]][1][3] + equipment[deckList["equip15"]][1][3], creatures[deckList["name15"]][1][4] + equipment[deckList["equip15"]][1][4]],
+             [0, 0]]
         }
 
 #the stats of the units in the enemy's deck
 encStats = {
-        #[damage, health, movement, attacks, range, cost, upkeep], [taunt, heal, berserk, splash], [taunted]
+        #[damage, health, movement, attacks, range, cost, upkeep], [taunt, heal, berserk, splash], [taunted, embarked]
         16: [[creatures[encList["name1"]][0][0] + equipment[encList["equip1"]][0][0], creatures[encList["name1"]][0][1] + equipment[encList["equip1"]][0][1], creatures[encList["name1"]][0][2] + equipment[encList["equip1"]][0][2], creatures[encList["name1"]][0][3] + equipment[encList["equip1"]][0][3], creatures[encList["name1"]][0][4] + equipment[encList["equip1"]][0][4], creatures[encList["name1"]][0][5] + equipment[encList["equip1"]][0][5], creatures[encList["name1"]][0][6] + equipment[encList["equip1"]][0][6]],
-            [creatures[encList["name1"]][1][0] + equipment[encList["equip1"]][1][0], creatures[encList["name1"]][1][1] + equipment[encList["equip1"]][1][1], creatures[encList["name1"]][1][2] + equipment[encList["equip1"]][1][2], creatures[encList["name1"]][1][3] + equipment[encList["equip1"]][1][3]],
-            [0]],
+             [creatures[encList["name1"]][1][0] + equipment[encList["equip1"]][1][0], creatures[encList["name1"]][1][1] + equipment[encList["equip1"]][1][1], creatures[encList["name1"]][1][2] + equipment[encList["equip1"]][1][2], creatures[encList["name1"]][1][3] + equipment[encList["equip1"]][1][3], creatures[encList["name1"]][1][4] + equipment[encList["equip1"]][1][4]],
+             [0, 0]],
         17: [[creatures[encList["name2"]][0][0] + equipment[encList["equip2"]][0][0], creatures[encList["name2"]][0][1] + equipment[encList["equip2"]][0][1], creatures[encList["name2"]][0][2] + equipment[encList["equip2"]][0][2], creatures[encList["name2"]][0][3] + equipment[encList["equip2"]][0][3], creatures[encList["name2"]][0][4] + equipment[encList["equip2"]][0][4], creatures[encList["name2"]][0][5] + equipment[encList["equip2"]][0][5], creatures[encList["name2"]][0][6] + equipment[encList["equip2"]][0][6]],
-            [creatures[encList["name2"]][1][0] + equipment[encList["equip2"]][1][0], creatures[encList["name2"]][1][1] + equipment[encList["equip2"]][1][1], creatures[encList["name2"]][1][2] + equipment[encList["equip2"]][1][2], creatures[encList["name2"]][1][3] + equipment[encList["equip2"]][1][3]],
-            [0]],
+             [creatures[encList["name2"]][1][0] + equipment[encList["equip2"]][1][0], creatures[encList["name2"]][1][1] + equipment[encList["equip2"]][1][1], creatures[encList["name2"]][1][2] + equipment[encList["equip2"]][1][2], creatures[encList["name2"]][1][3] + equipment[encList["equip2"]][1][3], creatures[encList["name2"]][1][4] + equipment[encList["equip2"]][1][4]],
+             [0, 0]],
         18: [[creatures[encList["name3"]][0][0] + equipment[encList["equip3"]][0][0], creatures[encList["name3"]][0][1] + equipment[encList["equip3"]][0][1], creatures[encList["name3"]][0][2] + equipment[encList["equip3"]][0][2], creatures[encList["name3"]][0][3] + equipment[encList["equip3"]][0][3], creatures[encList["name3"]][0][4] + equipment[encList["equip3"]][0][4], creatures[encList["name3"]][0][5] + equipment[encList["equip3"]][0][5], creatures[encList["name3"]][0][6] + equipment[encList["equip3"]][0][6]],
-            [creatures[encList["name3"]][1][0] + equipment[encList["equip3"]][1][0], creatures[encList["name3"]][1][1] + equipment[encList["equip3"]][1][1], creatures[encList["name3"]][1][2] + equipment[encList["equip3"]][1][2], creatures[encList["name3"]][1][3] + equipment[encList["equip3"]][1][3]],
-            [0]],
+             [creatures[encList["name3"]][1][0] + equipment[encList["equip3"]][1][0], creatures[encList["name3"]][1][1] + equipment[encList["equip3"]][1][1], creatures[encList["name3"]][1][2] + equipment[encList["equip3"]][1][2], creatures[encList["name3"]][1][3] + equipment[encList["equip3"]][1][3], creatures[encList["name3"]][1][4] + equipment[encList["equip3"]][1][4]],
+             [0, 0]],
         19: [[creatures[encList["name4"]][0][0] + equipment[encList["equip4"]][0][0], creatures[encList["name4"]][0][1] + equipment[encList["equip4"]][0][1], creatures[encList["name4"]][0][2] + equipment[encList["equip4"]][0][2], creatures[encList["name4"]][0][3] + equipment[encList["equip4"]][0][3], creatures[encList["name4"]][0][4] + equipment[encList["equip4"]][0][4], creatures[encList["name4"]][0][5] + equipment[encList["equip4"]][0][5], creatures[encList["name4"]][0][6] + equipment[encList["equip4"]][0][6]],
-            [creatures[encList["name4"]][1][0] + equipment[encList["equip4"]][1][0], creatures[encList["name4"]][1][1] + equipment[encList["equip4"]][1][1], creatures[encList["name4"]][1][2] + equipment[encList["equip4"]][1][2], creatures[encList["name4"]][1][3] + equipment[encList["equip4"]][1][3]],
-            [0]],
+             [creatures[encList["name4"]][1][0] + equipment[encList["equip4"]][1][0], creatures[encList["name4"]][1][1] + equipment[encList["equip4"]][1][1], creatures[encList["name4"]][1][2] + equipment[encList["equip4"]][1][2], creatures[encList["name4"]][1][3] + equipment[encList["equip4"]][1][3], creatures[encList["name4"]][1][4] + equipment[encList["equip4"]][1][4]],
+             [0, 0]],
         20: [[creatures[encList["name5"]][0][0] + equipment[encList["equip5"]][0][0], creatures[encList["name5"]][0][1] + equipment[encList["equip5"]][0][1], creatures[encList["name5"]][0][2] + equipment[encList["equip5"]][0][2], creatures[encList["name5"]][0][3] + equipment[encList["equip5"]][0][3], creatures[encList["name5"]][0][4] + equipment[encList["equip5"]][0][4], creatures[encList["name5"]][0][5] + equipment[encList["equip5"]][0][5], creatures[encList["name5"]][0][6] + equipment[encList["equip5"]][0][6]],
-            [creatures[encList["name5"]][1][0] + equipment[encList["equip5"]][1][0], creatures[encList["name5"]][1][1] + equipment[encList["equip5"]][1][1], creatures[encList["name5"]][1][2] + equipment[encList["equip5"]][1][2], creatures[encList["name5"]][1][3] + equipment[encList["equip5"]][1][3]],
-            [0]],
+             [creatures[encList["name5"]][1][0] + equipment[encList["equip5"]][1][0], creatures[encList["name5"]][1][1] + equipment[encList["equip5"]][1][1], creatures[encList["name5"]][1][2] + equipment[encList["equip5"]][1][2], creatures[encList["name5"]][1][3] + equipment[encList["equip5"]][1][3], creatures[encList["name5"]][1][4] + equipment[encList["equip5"]][1][4]],
+             [0, 0]],
         21: [[creatures[encList["name6"]][0][0] + equipment[encList["equip6"]][0][0], creatures[encList["name6"]][0][1] + equipment[encList["equip6"]][0][1], creatures[encList["name6"]][0][2] + equipment[encList["equip6"]][0][2], creatures[encList["name6"]][0][3] + equipment[encList["equip6"]][0][3], creatures[encList["name6"]][0][4] + equipment[encList["equip6"]][0][4], creatures[encList["name6"]][0][5] + equipment[encList["equip6"]][0][5], creatures[encList["name6"]][0][6] + equipment[encList["equip6"]][0][6]],
-            [creatures[encList["name6"]][1][0] + equipment[encList["equip6"]][1][0], creatures[encList["name6"]][1][1] + equipment[encList["equip6"]][1][1], creatures[encList["name6"]][1][2] + equipment[encList["equip6"]][1][2], creatures[encList["name6"]][1][3] + equipment[encList["equip6"]][1][3]],
-            [0]],
+             [creatures[encList["name6"]][1][0] + equipment[encList["equip6"]][1][0], creatures[encList["name6"]][1][1] + equipment[encList["equip6"]][1][1], creatures[encList["name6"]][1][2] + equipment[encList["equip6"]][1][2], creatures[encList["name6"]][1][3] + equipment[encList["equip6"]][1][3], creatures[encList["name6"]][1][4] + equipment[encList["equip6"]][1][4]],
+             [0, 0]],
         22: [[creatures[encList["name7"]][0][0] + equipment[encList["equip7"]][0][0], creatures[encList["name7"]][0][1] + equipment[encList["equip7"]][0][1], creatures[encList["name7"]][0][2] + equipment[encList["equip7"]][0][2], creatures[encList["name7"]][0][3] + equipment[encList["equip7"]][0][3], creatures[encList["name7"]][0][4] + equipment[encList["equip7"]][0][4], creatures[encList["name7"]][0][5] + equipment[encList["equip7"]][0][5], creatures[encList["name7"]][0][6] + equipment[encList["equip7"]][0][6]],
-            [creatures[encList["name7"]][1][0] + equipment[encList["equip7"]][1][0], creatures[encList["name7"]][1][1] + equipment[encList["equip7"]][1][1], creatures[encList["name7"]][1][2] + equipment[encList["equip7"]][1][2], creatures[encList["name7"]][1][3] + equipment[encList["equip7"]][1][3]],
-            [0]],
+             [creatures[encList["name7"]][1][0] + equipment[encList["equip7"]][1][0], creatures[encList["name7"]][1][1] + equipment[encList["equip7"]][1][1], creatures[encList["name7"]][1][2] + equipment[encList["equip7"]][1][2], creatures[encList["name7"]][1][3] + equipment[encList["equip7"]][1][3], creatures[encList["name7"]][1][4] + equipment[encList["equip7"]][1][4]],
+             [0, 0]],
         23: [[creatures[encList["name8"]][0][0] + equipment[encList["equip8"]][0][0], creatures[encList["name8"]][0][1] + equipment[encList["equip8"]][0][1], creatures[encList["name8"]][0][2] + equipment[encList["equip8"]][0][2], creatures[encList["name8"]][0][3] + equipment[encList["equip8"]][0][3], creatures[encList["name8"]][0][4] + equipment[encList["equip8"]][0][4], creatures[encList["name8"]][0][5] + equipment[encList["equip8"]][0][5], creatures[encList["name8"]][0][6] + equipment[encList["equip8"]][0][6]],
-            [creatures[encList["name8"]][1][0] + equipment[encList["equip8"]][1][0], creatures[encList["name8"]][1][1] + equipment[encList["equip8"]][1][1], creatures[encList["name8"]][1][2] + equipment[encList["equip8"]][1][2], creatures[encList["name8"]][1][3] + equipment[encList["equip8"]][1][3]],
-            [0]],
+             [creatures[encList["name8"]][1][0] + equipment[encList["equip8"]][1][0], creatures[encList["name8"]][1][1] + equipment[encList["equip8"]][1][1], creatures[encList["name8"]][1][2] + equipment[encList["equip8"]][1][2], creatures[encList["name8"]][1][3] + equipment[encList["equip8"]][1][3], creatures[encList["name8"]][1][4] + equipment[encList["equip8"]][1][4]],
+             [0, 0]],
         24: [[creatures[encList["name9"]][0][0] + equipment[encList["equip9"]][0][0], creatures[encList["name9"]][0][1] + equipment[encList["equip9"]][0][1], creatures[encList["name9"]][0][2] + equipment[encList["equip9"]][0][2], creatures[encList["name9"]][0][3] + equipment[encList["equip9"]][0][3], creatures[encList["name9"]][0][4] + equipment[encList["equip9"]][0][4], creatures[encList["name9"]][0][5] + equipment[encList["equip9"]][0][5], creatures[encList["name9"]][0][6] + equipment[encList["equip9"]][0][6]],
-            [creatures[encList["name9"]][1][0] + equipment[encList["equip9"]][1][0], creatures[encList["name9"]][1][1] + equipment[encList["equip9"]][1][1], creatures[encList["name9"]][1][2] + equipment[encList["equip9"]][1][2], creatures[encList["name9"]][1][3] + equipment[encList["equip9"]][1][3]],
-            [0]],
+             [creatures[encList["name9"]][1][0] + equipment[encList["equip9"]][1][0], creatures[encList["name9"]][1][1] + equipment[encList["equip9"]][1][1], creatures[encList["name9"]][1][2] + equipment[encList["equip9"]][1][2], creatures[encList["name9"]][1][3] + equipment[encList["equip9"]][1][3], creatures[encList["name9"]][1][4] + equipment[encList["equip9"]][1][4]],
+             [0, 0]],
         25: [[creatures[encList["name10"]][0][0] + equipment[encList["equip10"]][0][0], creatures[encList["name10"]][0][1] + equipment[encList["equip10"]][0][1], creatures[encList["name10"]][0][2] + equipment[encList["equip10"]][0][2], creatures[encList["name10"]][0][3] + equipment[encList["equip10"]][0][3], creatures[encList["name10"]][0][4] + equipment[encList["equip10"]][0][4], creatures[encList["name10"]][0][5] + equipment[encList["equip10"]][0][5], creatures[encList["name10"]][0][6] + equipment[encList["equip10"]][0][6]],
-            [creatures[encList["name10"]][1][0] + equipment[encList["equip10"]][1][0], creatures[encList["name10"]][1][1] + equipment[encList["equip10"]][1][1], creatures[encList["name10"]][1][2] + equipment[encList["equip10"]][1][2], creatures[encList["name10"]][1][3] + equipment[encList["equip10"]][1][3]],
-            [0]],
+             [creatures[encList["name10"]][1][0] + equipment[encList["equip10"]][1][0], creatures[encList["name10"]][1][1] + equipment[encList["equip10"]][1][1], creatures[encList["name10"]][1][2] + equipment[encList["equip10"]][1][2], creatures[encList["name10"]][1][3] + equipment[encList["equip10"]][1][3], creatures[encList["name10"]][1][4] + equipment[encList["equip10"]][1][4]],
+             [0, 0]],
         26: [[creatures[encList["name11"]][0][0] + equipment[encList["equip11"]][0][0], creatures[encList["name11"]][0][1] + equipment[encList["equip11"]][0][1], creatures[encList["name11"]][0][2] + equipment[encList["equip11"]][0][2], creatures[encList["name11"]][0][3] + equipment[encList["equip11"]][0][3], creatures[encList["name11"]][0][4] + equipment[encList["equip11"]][0][4], creatures[encList["name11"]][0][5] + equipment[encList["equip11"]][0][5], creatures[encList["name11"]][0][6] + equipment[encList["equip11"]][0][6]],
-            [creatures[encList["name11"]][1][0] + equipment[encList["equip11"]][1][0], creatures[encList["name11"]][1][1] + equipment[encList["equip11"]][1][1], creatures[encList["name11"]][1][2] + equipment[encList["equip11"]][1][2], creatures[encList["name11"]][1][3] + equipment[encList["equip11"]][1][3]],
-            [0]],
+             [creatures[encList["name11"]][1][0] + equipment[encList["equip11"]][1][0], creatures[encList["name11"]][1][1] + equipment[encList["equip11"]][1][1], creatures[encList["name11"]][1][2] + equipment[encList["equip11"]][1][2], creatures[encList["name11"]][1][3] + equipment[encList["equip11"]][1][3], creatures[encList["name11"]][1][4] + equipment[encList["equip11"]][1][4]],
+             [0, 0]],
         27: [[creatures[encList["name12"]][0][0] + equipment[encList["equip12"]][0][0], creatures[encList["name12"]][0][1] + equipment[encList["equip12"]][0][1], creatures[encList["name12"]][0][2] + equipment[encList["equip12"]][0][2], creatures[encList["name12"]][0][3] + equipment[encList["equip12"]][0][3], creatures[encList["name12"]][0][4] + equipment[encList["equip12"]][0][4], creatures[encList["name12"]][0][5] + equipment[encList["equip12"]][0][5], creatures[encList["name12"]][0][6] + equipment[encList["equip12"]][0][6]],
-            [creatures[encList["name12"]][1][0] + equipment[encList["equip12"]][1][0], creatures[encList["name12"]][1][1] + equipment[encList["equip12"]][1][1], creatures[encList["name12"]][1][2] + equipment[encList["equip12"]][1][2], creatures[encList["name12"]][1][3] + equipment[encList["equip12"]][1][3]],
-            [0]],
+             [creatures[encList["name12"]][1][0] + equipment[encList["equip12"]][1][0], creatures[encList["name12"]][1][1] + equipment[encList["equip12"]][1][1], creatures[encList["name12"]][1][2] + equipment[encList["equip12"]][1][2], creatures[encList["name12"]][1][3] + equipment[encList["equip12"]][1][3], creatures[encList["name12"]][1][4] + equipment[encList["equip12"]][1][4]],
+             [0, 0]],
         28: [[creatures[encList["name13"]][0][0] + equipment[encList["equip13"]][0][0], creatures[encList["name13"]][0][1] + equipment[encList["equip13"]][0][1], creatures[encList["name13"]][0][2] + equipment[encList["equip13"]][0][2], creatures[encList["name13"]][0][3] + equipment[encList["equip13"]][0][3], creatures[encList["name13"]][0][4] + equipment[encList["equip13"]][0][4], creatures[encList["name13"]][0][5] + equipment[encList["equip13"]][0][5], creatures[encList["name13"]][0][6] + equipment[encList["equip13"]][0][6]],
-            [creatures[encList["name13"]][1][0] + equipment[encList["equip13"]][1][0], creatures[encList["name13"]][1][1] + equipment[encList["equip13"]][1][1], creatures[encList["name13"]][1][2] + equipment[encList["equip13"]][1][2], creatures[encList["name13"]][1][3] + equipment[encList["equip13"]][1][3]],
-            [0]],
+             [creatures[encList["name13"]][1][0] + equipment[encList["equip13"]][1][0], creatures[encList["name13"]][1][1] + equipment[encList["equip13"]][1][1], creatures[encList["name13"]][1][2] + equipment[encList["equip13"]][1][2], creatures[encList["name13"]][1][3] + equipment[encList["equip13"]][1][3], creatures[encList["name13"]][1][4] + equipment[encList["equip13"]][1][4]],
+             [0, 0]],
         29: [[creatures[encList["name14"]][0][0] + equipment[encList["equip14"]][0][0], creatures[encList["name14"]][0][1] + equipment[encList["equip14"]][0][1], creatures[encList["name14"]][0][2] + equipment[encList["equip14"]][0][2], creatures[encList["name14"]][0][3] + equipment[encList["equip14"]][0][3], creatures[encList["name14"]][0][4] + equipment[encList["equip14"]][0][4], creatures[encList["name14"]][0][5] + equipment[encList["equip14"]][0][5], creatures[encList["name14"]][0][6] + equipment[encList["equip14"]][0][6]],
-            [creatures[encList["name14"]][1][0] + equipment[encList["equip14"]][1][0], creatures[encList["name14"]][1][1] + equipment[encList["equip14"]][1][1], creatures[encList["name14"]][1][2] + equipment[encList["equip14"]][1][2], creatures[encList["name14"]][1][3] + equipment[encList["equip14"]][1][3]],
-            [0]],
+             [creatures[encList["name14"]][1][0] + equipment[encList["equip14"]][1][0], creatures[encList["name14"]][1][1] + equipment[encList["equip14"]][1][1], creatures[encList["name14"]][1][2] + equipment[encList["equip14"]][1][2], creatures[encList["name14"]][1][3] + equipment[encList["equip14"]][1][3], creatures[encList["name14"]][1][4] + equipment[encList["equip14"]][1][4]],
+             [0, 0]],
         30: [[creatures[encList["name15"]][0][0] + equipment[encList["equip15"]][0][0], creatures[encList["name15"]][0][1] + equipment[encList["equip15"]][0][1], creatures[encList["name15"]][0][2] + equipment[encList["equip15"]][0][2], creatures[encList["name15"]][0][3] + equipment[encList["equip15"]][0][3], creatures[encList["name15"]][0][4] + equipment[encList["equip15"]][0][4], creatures[encList["name15"]][0][5] + equipment[encList["equip15"]][0][5], creatures[encList["name15"]][0][6] + equipment[encList["equip15"]][0][6]],
-            [creatures[encList["name15"]][1][0] + equipment[encList["equip15"]][1][0], creatures[encList["name15"]][1][1] + equipment[encList["equip15"]][1][1], creatures[encList["name15"]][1][2] + equipment[encList["equip15"]][1][2], creatures[encList["name15"]][1][3] + equipment[encList["equip15"]][1][3]],
-            [0]]
+             [creatures[encList["name15"]][1][0] + equipment[encList["equip15"]][1][0], creatures[encList["name15"]][1][1] + equipment[encList["equip15"]][1][1], creatures[encList["name15"]][1][2] + equipment[encList["equip15"]][1][2], creatures[encList["name15"]][1][3] + equipment[encList["equip15"]][1][3], creatures[encList["name15"]][1][4] + equipment[encList["equip15"]][1][4]],
+             [0, 0]]
         }
 
 #the instance of all units used in a battle
@@ -349,7 +361,7 @@ def main():
             if playerTurn == True and index >= 0 and index <= len(playerHand) - 1:
                 displayUnit = playerHand[index]
                 update(displayUnit = displayUnit)
-            if playerTurn == False and index >= 0 and index <= len(enemyHand) - 1:    
+            if playerTurn == False and index >= 0 and index <= len(enemyHand) - 1:
                 displayUnit = enemyHand[index]
                 update(displayUnit = displayUnit)
             if mouse[1] == 1:
@@ -361,6 +373,7 @@ def main():
             if event.type == pygame.QUIT:
                 # change the value to False, to exit the main loop
                 running = False
+            #you can add 'if event.button = 1' to limit input to your list and not have errors
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse[event.button] = 1
                 mouse[0] = event.pos
@@ -444,6 +457,9 @@ def update(displayUnit):
             taunted = font.render(f"TAUNTED {battleDict[displayUnit][2][0]} TURNS", True, (255, 0, 0))
             blit(taunted, screen, 1505, abilities * 50 + 300)
             abilities = abilities + 1
+    for space in selectBoard:
+        if(space <= -3):
+            blit(selector, screen, 150 * (selectBoard.index(space) % 7) + 445, 220 * (selectBoard.index(space) // 7) + 20)
     if (playerTurn == True):
         for card in playerHand:
             dmg = font.render(f"{battleDict[card][0][0]}", True, (255, 0, 0))
@@ -481,8 +497,6 @@ def update(displayUnit):
                 blit(equip, screen, 150 * (board.index(card) % 7) + 445, 220 * (board.index(card) // 7) + 61)
                 blit(dmg, screen, 150 * (board.index(card) % 7) + 445 + 10, 220 * (board.index(card) // 7) + 61 - 30)
                 blit(hp, screen, 150 * (board.index(card) % 7) + 445 + 80, 220 * (board.index(card) // 7) + 61 - 30)
-        if(card <= -3):
-            blit(selector, screen, 150 * (board.index(card) % 7) + 445, 220 * (board.index(card) // 7) + 20)
         if(combat == True and playerTurn == True):
             board.reverse()
     pygame.display.flip()
@@ -499,7 +513,7 @@ def boardInput(index):
     global displayUnit
     global selectors
     #if selector clicked
-    if(board[index] <= -3):
+    if(selectBoard[index] <= -3):
         #if placing unit from hand
         if(board.count(select) == 0):
             #cleanup
@@ -511,17 +525,29 @@ def boardInput(index):
                 enemyAp = enemyAp - battleDict[select][0][5]
                 enemyUpkeep = enemyUpkeep + battleDict[select][0][6]
                 enemyHand.remove(select)
-        #if moving unit on board
-        else:
-            #cleanup
+            #place unit
+            board[index] = select
+        elif board[index] >= 1 and battleDict[board[index]][1][4] >= 1:
             if(board.index(select) % 7 == 0):
                 board[board.index(select)] = -1
             elif(board.index(select) % 7 == 6):
                 board[board.index(select)] = -2
             else:
                 board[board.index(select)] = 0
-        #move or place unit
-        board[index] = select
+            battleDict[board[index]][2][1] = select
+        elif board[index] >= 1 and battleDict[select][1][4] >= 1:
+            if(index % 7 == 0):
+                board[index] = -1
+            elif(index % 7 == 6):
+                board[index] = -2
+            else:
+                board[index] = 0
+            battleDict[select][2][1] = board[index]
+        #if moving unit on board
+        else:
+            #switch units/move unit
+            board[board.index(select)] = board[index]
+            board[index] = select
         removeSelectors()
         select = 0
     #if unit clicked
@@ -537,8 +563,8 @@ def boardInput(index):
                 while True:
                     if(row == 3):
                         break
-                    if(board[(index % 7) + (7 * row)] <= 0):
-                        board[(index % 7) + (7 * row)] = - (3 + selectors)
+                    if board[(index % 7) + (7 * row)] <= 0 or (board[(index % 7) + (7 * row)] <= 15 and battleDict[board[(index % 7) + (7 * row)]][2][0] <= 0 and board[(index % 7) + (7 * row)] != select):
+                        selectBoard[(index % 7) + (7 * row)] = - (3 + selectors)
                         selectors = selectors + 1
                     row = row + 1
         else:
@@ -553,8 +579,8 @@ def boardInput(index):
                     while True:
                         if(row == 3):
                             break
-                        if(board[(index % 7) + (7 * row)] <= 0):
-                            board[(index % 7) + (7 * row)] = - (3 + selectors)
+                        if board[(index % 7) + (7 * row)] <= 0 or (board[(index % 7) + (7 * row)] >= 16 and battleDict[board[(index % 7) + (7 * row)]][2][0] <= 0 and board[(index % 7) + (7 * row)] != select):
+                            selectBoard[(index % 7) + (7 * row)] = - (3 + selectors)
                             selectors = selectors + 1
                         row = row + 1
     #if empty space clicked
@@ -578,7 +604,7 @@ def handInput(index):
                 if(row == 3):
                     break
                 if(board[7 * row] == -1):
-                    board[7 * row] = -1 * (3 + selectors)
+                    selectBoard[7 * row] = -1 * (3 + selectors)
                     selectors = selectors + 1
                 row = row + 1
     #if its their turn and they have a card in that slot
@@ -592,7 +618,7 @@ def handInput(index):
                 if(row == 3):
                     break
                 if(board[6 + (7 * row)] == -2):
-                    board[6 + (7 * row)] = -1 * (3 + selectors)
+                    selectBoard[6 + (7 * row)] = -1 * (3 + selectors)
                     selectors = selectors + 1
                 row = row + 1
 
@@ -667,14 +693,9 @@ def processFatality(damagedUnit, player):
 #removes selector locations from board
 def removeSelectors():
     global selectors
-    for space in board:
+    for space in selectBoard:
         if(space <= -3):
-            if(board.index(space) % 7 == 0):
-                board[board.index(space)] = -1
-            elif(board.index(space) % 7 == 6):
-                board[board.index(space)] = -2
-            else:
-                board[board.index(space)] = 0
+                selectBoard[selectBoard.index(space)] = 0
     selectors = 0
 
 #runs combat
